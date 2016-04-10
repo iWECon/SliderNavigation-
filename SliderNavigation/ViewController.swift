@@ -139,48 +139,50 @@ extension ViewController: UIScrollViewDelegate {
         
         let offsetY = scrollView.contentOffset.y
         
-        // < 向下拉动  > 向上拉动
+        var navViewHeight = navView.frame.size.height
+        
+        // 向上
         if previousOffsetY <= offsetY {
             
-            if navView.frame.origin.y <= -44 {
-                
-                navView.frame.origin.y = -44
+            if navViewHeight <= 20 {
+                navViewHeight = 20
             } else {
-                
-                navView.frame.origin.y = -(offsetY + 64);
+                navViewHeight = navViewHeight - (offsetY - previousOffsetY)
             }
+            
+            navView.frame.size.height = navViewHeight
             
         } else {
+        // 向下
             
-            if navView.frame.origin.y >= 0 {
-                
-                navView.frame.origin.y = 0
-                
+            if navViewHeight >= 64 {
+                navViewHeight = 64
             } else {
-                
-                navView.frame.origin.y = navView.frame.origin.y - (offsetY - previousOffsetY);
-                
+                navViewHeight = navViewHeight + (previousOffsetY - offsetY)
             }
+            
+            navView.frame.size.height = navViewHeight
             
         }
         
         
         // 判断是否滚动到最顶部, 防止回弹效果
         if offsetY <= -64 {
-            navView.frame.origin.y = 0
+            navView.frame.size.height = 64
         }
         
         
+        // 当前滚动Y
         let currentOffset = offsetY + scrollView.bounds.height - scrollView.contentInset.bottom
-        
+        // 最大滚动Y
         let maximumOffset = scrollView.contentSize.height
+        
         // 判断是否滚动到最底部, 防止回弹效果
         if currentOffset >= maximumOffset {
-            
-            navView.frame.origin.y = -44
+            navView.frame.size.height = 20
         }
         
-        
+        navView.frame.origin.y = 0
         previousOffsetY = offsetY
     }
     
