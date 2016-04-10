@@ -140,20 +140,26 @@ extension ViewController: UIScrollViewDelegate {
         let offsetY = scrollView.contentOffset.y
         
         // < 向下拉动  > 向上拉动
-        if previousOffsetY < offsetY {
+        if previousOffsetY <= offsetY {
             
-            if navView.frame.height <= 20 {
-                navView.frame.size.height = 20
+            if navView.frame.origin.y <= -44 {
+                
+                navView.frame.origin.y = -44
             } else {
-                navView.frame.size.height = navView.frame.size.height - 5;
+                
+                navView.frame.origin.y = -(offsetY + 64);
             }
             
         } else {
             
-            if navView.frame.height >= 64 {
-                navView.frame.size.height = 64
+            if navView.frame.origin.y >= 0 {
+                
+                navView.frame.origin.y = 0
+                
             } else {
-                navView.frame.size.height = navView.frame.size.height + 5;
+                
+                navView.frame.origin.y = navView.frame.origin.y - (offsetY - previousOffsetY);
+                
             }
             
         }
@@ -161,7 +167,7 @@ extension ViewController: UIScrollViewDelegate {
         
         // 判断是否滚动到最顶部, 防止回弹效果
         if offsetY <= -64 {
-            navView.frame.size.height = 64
+            navView.frame.origin.y = 0
         }
         
         
@@ -171,7 +177,7 @@ extension ViewController: UIScrollViewDelegate {
         // 判断是否滚动到最底部, 防止回弹效果
         if currentOffset >= maximumOffset {
             
-            navView.frame.size.height = 20
+            navView.frame.origin.y = -44
         }
         
         
